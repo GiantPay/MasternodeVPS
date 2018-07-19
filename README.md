@@ -56,13 +56,13 @@ Comparing with building from source manually, you will benefit from using this s
 SSH to your VPS and clone the Github repository:
 
 ```bash
-git clone https://github.com/masternodes/vps.git && cd vps
+git clone https://github.com/GiantPay/MasternodeVPS.git && cd MasternodeVPS
 ```
 
 Install & configure your desired master node with options:
 
 ```bash
-./install.sh -p pivx
+./install.sh -p gic
 ```
 
 ## Examples for typical script invocation
@@ -105,7 +105,7 @@ The _install.sh_ script support the following parameters:
 
 | Long Option  | Short Option | Values              | description                                                         |
 | :----------- | :----------- | ------------------- | ------------------------------------------------------------------- |
-| --project    | -p           | project, e.g. "pix" | shortname for the project                                           |
+| --project    | -p           | project, e.g. "gic" | shortname for the project                                           |
 | --net        | -n           | "4" / "6"           | ip type for masternode. (ipv)6 is default                           |
 | --release    | -r           | e.g. "tags/v3.0.4"  | a specific git tag/branch, defaults to latest tested                |
 | --count      | -c           | number              | amount of masternodes to be configured                              |
@@ -120,7 +120,7 @@ The _install.sh_ script support the following parameters:
 If you want to check the status of your masternode, the best way is currently running the cli e.g. for $MUE via
 
 ```
-/usr/local/bin/mue-cli -conf=/etc/masternodes/mue_n1.conf getinfo
+/usr/local/bin/giant-cli -conf=/etc/masternodes/giant_n1.conf getinfo
 
 {
   "version": 1000302,
