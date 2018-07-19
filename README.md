@@ -69,34 +69,34 @@ Install & configure your desired master node with options:
 
 These are only a couple of examples for typical setups. Check my [easy step-by-step guide for [vultr](/docs/masternode_vps.md) that will guide you through the hardest parts.
 
-**Install & configure 4 PIVX masternodes:**
+**Install & configure 4 Giant masternodes:**
 
 ```bash
-./install.sh -p pivx -c 4
+./install.sh -p gic -c 4
 ```
 
-**Update daemon of previously installed PIVX masternodes:**
+**Update daemon of previously installed Giant masternodes:**
 
 ```bash
-./install.sh -p pivx -u
+./install.sh -p gic -u
 ```
 
-**Install 6 PIVX masternodes with the git release tag "tags/v3.0.5.1"**
+**Install 6 Giant masternodes with the git release tag "tags/v3.0.5.1"**
 
 ```bash
-./install.sh -p pivx -c 6 -r "tags/v3.0.5.1"
+./install.sh -p gic -c 6 -r "tags/v3.0.5.1"
 ```
 
-**Wipe all PIVX masternode data:**
+**Wipe all Giant masternode data:**
 
 ```bash
-./install.sh -p pivx -w
+./install.sh -p gic -w
 ```
 
-**Install 2 PIVX masternodes and configure sentinel monitoring:**
+**Install 2 Giant masternodes and configure sentinel monitoring:**
 
 ```bash
-./install.sh -p pivx -c 2 -s
+./install.sh -p gic -c 2 -s
 ```
 
 ## Options
