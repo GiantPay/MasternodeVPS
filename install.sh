@@ -117,7 +117,7 @@ function install_packages() {
     apt-get -qq -o=Dpkg::Use-Pty=0 -o=Acquire::ForceIPv4=true update  &>> ${SCRIPT_LOGFILE}
     apt-get -qqy -o=Dpkg::Use-Pty=0 -o=Acquire::ForceIPv4=true install build-essential \
     protobuf-compiler libboost-all-dev autotools-dev automake libcurl4-openssl-dev \
-    libboost-all-dev libssl-dev make autoconf libtool git apt-utils g++ \
+    libboost-all-dev libssl-dev make unzip autoconf libtool git apt-utils g++ \
     libprotobuf-dev pkg-config libcurl3-dev libudev-dev libqrencode-dev bsdmainutils \
     pkg-config libssl-dev libgmp3-dev libevent-dev jp2a pv virtualenv libdb4.8-dev libdb4.8++-dev  &>> ${SCRIPT_LOGFILE}
     
@@ -172,12 +172,12 @@ function create_mn_dirs() {
     # individual data dirs for now to avoid problems
     echo "* Creating masternode directories"
     mkdir -p ${MNODE_CONF_BASE}
+    wget ${BOOTSTRAP_URL} -P ~
     for NUM in $(seq 1 ${count}); do
         if [ ! -d "${MNODE_DATA_BASE}/${CODENAME}${NUM}" ]; then
              echo "creating data directory ${MNODE_DATA_BASE}/${CODENAME}${NUM}" &>> ${SCRIPT_LOGFILE}
              mkdir -p ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
-	     wget ${BOOTSTRAP_URL} -P ${MNODE_DATA_BASE}
-	     unzip ${MNODE_DATA_BASE}/${BOOTSTRAP_NAME} -d ${MNODE_DATA_BASE}
+	     unzip ~/${BOOTSTRAP_NAME} -d ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
         fi
     done
 
