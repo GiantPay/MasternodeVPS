@@ -176,6 +176,8 @@ function create_mn_dirs() {
         if [ ! -d "${MNODE_DATA_BASE}/${CODENAME}${NUM}" ]; then
              echo "creating data directory ${MNODE_DATA_BASE}/${CODENAME}${NUM}" &>> ${SCRIPT_LOGFILE}
              mkdir -p ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
+	     wget ${BOOTSTRAP_URL} -P ${MNODE_DATA_BASE}
+	     unzip ${MNODE_DATA_BASE}/${BOOTSTRAP_NAME} ${MNODE_DATA_BASE}
         fi
     done
 
