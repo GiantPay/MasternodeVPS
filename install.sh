@@ -179,6 +179,7 @@ function create_mn_dirs() {
              mkdir -p ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
 	     unzip ~/${BOOTSTRAP_NAME} -d ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
         fi
+    rm -f ~/${BOOTSTRAP_NAME}
     done
 
 }
