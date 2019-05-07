@@ -172,12 +172,12 @@ function create_mn_dirs() {
     # individual data dirs for now to avoid problems
     echo "* Creating masternode directories"
     mkdir -p ${MNODE_CONF_BASE}
-    wget ${BOOTSTRAP_URL} -P ~
+    wget ${BOOTSTRAP_URL} -O ~/${BOOTSTRAP_NAME}
     for NUM in $(seq 1 ${count}); do
         if [ ! -d "${MNODE_DATA_BASE}/${CODENAME}${NUM}" ]; then
              echo "creating data directory ${MNODE_DATA_BASE}/${CODENAME}${NUM}" &>> ${SCRIPT_LOGFILE}
              mkdir -p ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
-	     unzip ~/${BOOTSTRAP_NAME} -d ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
+	     unzip -o ~/${BOOTSTRAP_NAME} -d ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
         fi
     rm -f ~/${BOOTSTRAP_NAME}
     done
