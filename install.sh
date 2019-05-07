@@ -165,6 +165,16 @@ function create_mn_user() {
 }
 
 #
+# /* removes masternodes directory, otherwise bootstrap copy will fail in case of script re-launch  */
+#
+function remove_mn_dirs() {
+
+    echo "* Removing existing masternode directories"
+    rm -rf ${MNODE_DATA_BASE}
+    
+}
+
+#
 # /* no parameters, creates a masternode data directory (one per masternode)  */
 #
 function create_mn_dirs() {
@@ -529,6 +539,7 @@ function source_config() {
         build_mn_from_source
         if [ "$update" -eq 0 ]; then
             create_mn_user
+	    remove_mn_dirs
             create_mn_dirs
             # sentinel setup
             if [ "$sentinel" -eq 1 ]; then
