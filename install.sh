@@ -641,6 +641,7 @@ function final_call() {
     echo "=> $(tput bold)$(tput setaf 2) All Data directories are in: ${MNODE_DATA_BASE} $(tput sgr0)"
     echo ""
     echo "$(tput bold)$(tput setaf 1)Important:$(tput sgr0) run $(tput setaf 2) /usr/local/bin/activate_masternodes_${CODENAME} $(tput sgr0) as root to activate your nodes."
+    echo "Run $(tput setaf 2) /usr/local/bin/remove_bootstraps_${CODENAME} $(tput sgr0) as root to remove the old bootstrap files once the nodes have finished the updates."
 
     # place future helper script accordingly on fresh install
     if [ "$update" -eq 0 ]; then
@@ -653,6 +654,18 @@ function final_call() {
         done
 
         chmod u+x ${MNODE_HELPER}_${CODENAME}
+    fi
+    
+    # creates a script to remove old bootstrap files once the blockchains are updated
+    if [ "$update" -eq 0 ]; then
+        cp ${SCRIPTPATH}/scripts/remove_bootstraps.sh ${MNODE_BOOTSTRAP}_${CODENAME}
+        echo "">> ${MNODE_BOOTSTRAP}_${CODENAME}
+
+        for NUM in $(seq 1 ${count}); do
+            echo "rm -f ${MNODE_DATA_BASE}/${CODENAME}${NUM}/bootstrap.dat.old" >> ${MNODE_BOOTSTRAP}_${CODENAME}
+        done
+
+        chmod u+x ${MNODE_BOOTSTRAP}_${CODENAME}
     fi
 
     if [ "$startnodes" -eq 1 ]; then
