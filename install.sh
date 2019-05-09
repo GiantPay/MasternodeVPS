@@ -117,7 +117,7 @@ function install_packages() {
     apt-get -qq -o=Dpkg::Use-Pty=0 -o=Acquire::ForceIPv4=true update  &>> ${SCRIPT_LOGFILE}
     apt-get -qqy -o=Dpkg::Use-Pty=0 -o=Acquire::ForceIPv4=true install build-essential \
     protobuf-compiler libboost-all-dev autotools-dev automake libcurl4-openssl-dev \
-    libboost-all-dev libssl-dev make autoconf libtool git apt-utils g++ \
+    libboost-all-dev libssl-dev make unzip autoconf libtool git apt-utils g++ \
     libprotobuf-dev pkg-config libcurl3-dev libudev-dev libqrencode-dev bsdmainutils \
     pkg-config libssl-dev libgmp3-dev libevent-dev jp2a pv virtualenv libdb4.8-dev libdb4.8++-dev  &>> ${SCRIPT_LOGFILE}
     
@@ -165,6 +165,16 @@ function create_mn_user() {
 }
 
 #
+# /* removes masternodes directory, otherwise bootstrap copy will fail in case of script re-launch  */
+#
+function remove_mn_dirs() {
+
+    echo "* Removing existing masternode directories"
+    rm -rf ${MNODE_DATA_BASE}
+    
+}
+
+#
 # /* no parameters, creates a masternode data directory (one per masternode)  */
 #
 function create_mn_dirs() {
@@ -172,12 +182,15 @@ function create_mn_dirs() {
     # individual data dirs for now to avoid problems
     echo "* Creating masternode directories"
     mkdir -p ${MNODE_CONF_BASE}
+    wget ${BOOTSTRAP_URL} -O ~/${BOOTSTRAP_NAME}
     for NUM in $(seq 1 ${count}); do
         if [ ! -d "${MNODE_DATA_BASE}/${CODENAME}${NUM}" ]; then
              echo "creating data directory ${MNODE_DATA_BASE}/${CODENAME}${NUM}" &>> ${SCRIPT_LOGFILE}
              mkdir -p ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
+	     unzip -o ~/${BOOTSTRAP_NAME} -d ${MNODE_DATA_BASE}/${CODENAME}${NUM} &>> ${SCRIPT_LOGFILE}
         fi
     done
+    rm -f ~/${BOOTSTRAP_NAME}
 
 }
 
@@ -526,6 +539,7 @@ function source_config() {
         build_mn_from_source
         if [ "$update" -eq 0 ]; then
             create_mn_user
+	    remove_mn_dirs
             create_mn_dirs
             # sentinel setup
             if [ "$sentinel" -eq 1 ]; then
@@ -627,6 +641,7 @@ function final_call() {
     echo "=> $(tput bold)$(tput setaf 2) All Data directories are in: ${MNODE_DATA_BASE} $(tput sgr0)"
     echo ""
     echo "$(tput bold)$(tput setaf 1)Important:$(tput sgr0) run $(tput setaf 2) /usr/local/bin/activate_masternodes_${CODENAME} $(tput sgr0) as root to activate your nodes."
+    echo "Run $(tput setaf 2) /usr/local/bin/remove_bootstraps_${CODENAME} $(tput sgr0) as root to remove the old bootstrap files once the nodes have finished the updates."
 
     # place future helper script accordingly on fresh install
     if [ "$update" -eq 0 ]; then
@@ -639,6 +654,18 @@ function final_call() {
         done
 
         chmod u+x ${MNODE_HELPER}_${CODENAME}
+    fi
+    
+    # creates a script to remove old bootstrap files once the blockchains are updated
+    if [ "$update" -eq 0 ]; then
+        cp ${SCRIPTPATH}/scripts/remove_bootstraps.sh ${MNODE_BOOTSTRAP}_${CODENAME}
+        echo "">> ${MNODE_BOOTSTRAP}_${CODENAME}
+
+        for NUM in $(seq 1 ${count}); do
+            echo "rm -f ${MNODE_DATA_BASE}/${CODENAME}${NUM}/bootstrap.dat.old" >> ${MNODE_BOOTSTRAP}_${CODENAME}
+        done
+
+        chmod u+x ${MNODE_BOOTSTRAP}_${CODENAME}
     fi
 
     if [ "$startnodes" -eq 1 ]; then
